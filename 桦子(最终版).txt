@@ -1,0 +1,55 @@
+
+import java.util.Scanner;
+
+public class guangguang {
+	public static void main(String[] args) {
+		System.out.println("生日为:" + getBirthday());
+	}
+
+	public static String getBirthday() {
+		Scanner scanner = new Scanner(System.in);
+		System.out.print("请输入生日：");
+		String birthday = scanner.nextLine();
+		int flag = CorrectFormat(birthday);
+		while (flag != 0) {
+			if (flag == 1)
+				System.out.print("请按照格式重新输入您的生日：");
+			else if (flag == 2)
+				System.out.print("请输入正确的生日日期：");
+			birthday = scanner.nextLine();
+			flag = CorrectFormat(birthday);
+		}
+
+		return birthday.replace(" ", "");
+	}
+
+	/* 函数返回值：0代表输入合法，1代表输入格式错误，2代表输入日期错误 */
+	public static int CorrectFormat(String str) { // 判断格式是否合法
+		str = str.replace(" ", ""); // 处理空格
+		char[] charArr = str.toCharArray();
+		if (charArr.length != 5 || charArr[2] != '/') // 判断输入格式是否为 MM/DD
+			return 1;
+		String[] temp = str.split("/");
+		try {
+			int month = Integer.parseInt(temp[0]);
+			int day = Integer.parseInt(temp[1]);
+			if (possibleDate(month, day)) // 判断日期是否合法
+				return 0;
+			else
+				return 2;
+		} catch (NumberFormatException e) { // 判断输入是否为数字
+			return 1;
+		}
+
+	}
+
+	public static boolean possibleDate(int month, int day) { // 判断日期是否合法
+		if (month > 12 || day > 31 || month == 0 || day == 0)
+			return false;
+		else if ((day > 30 && (month == 4 || month == 6 || month == 9 || month == 11)) || (month == 2 && day > 29))
+			return false;
+		else
+			return true;
+	}
+
+}
